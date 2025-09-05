@@ -15,7 +15,7 @@ namespace AccountRegistration
 {
     public partial class OrganizationProfile : Form
     {
-        string connectionString = "Server=DESKTOP-PB8NME4\\SQLEXPRESS;Database=RegistrationDB;Trusted_Connection=True;";
+        string connectionString = "Server=DESKTOP-PBNME4\\SQLEXPRESS;Database=RegistrationDB;Trusted_Connection=True;";
 
         private string _FullName;
         private int _Age;
@@ -139,66 +139,14 @@ namespace AccountRegistration
             return _Age;
         }
 
-        private void btnRegister_Click(object sender, EventArgs e)
-        {
-           
-            if (string.IsNullOrWhiteSpace(textBoxLName.Text) ||
-                string.IsNullOrWhiteSpace(textBoxFName.Text) ||
-                string.IsNullOrWhiteSpace(textBoxStudNum.Text) ||
-                string.IsNullOrWhiteSpace(cbPrograms.Text) ||
-                string.IsNullOrWhiteSpace(cbGender.Text) ||
-                string.IsNullOrWhiteSpace(textBoxContNum.Text) ||
-                string.IsNullOrWhiteSpace(textBoxAge.Text))
-            {
-                MessageBox.Show("Please complete all fields before submitting.", "Missing Information", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-          
-            StudentInformationClass.SetFullName = FullName(textBoxLName.Text, textBoxFName.Text, textBoxMName.Text);
-            StudentInformationClass.SetStudentNo = StudentNumber(textBoxStudNum.Text);
-            StudentInformationClass.SetProgram = cbPrograms.Text;
-            StudentInformationClass.SetGender = cbGender.Text;
+        private void btnRegister_Click(object sender, EventArgs e) { 
+            StudentInformationClass.SetFullName = FullName(textBoxLName.Text, textBoxFName.Text, textBoxMName.Text); 
+            StudentInformationClass.SetStudentNo = StudentNumber(textBoxStudNum.Text); 
+            StudentInformationClass.SetProgram = cbPrograms.Text; 
+            StudentInformationClass.SetGender = cbGender.Text; 
             StudentInformationClass.SetContactNo = ContactNo(textBoxContNum.Text);
-            StudentInformationClass.SetAge = Age(textBoxAge.Text);
-            StudentInformationClass.SetBirthDay = datePickerBirthday.Value.ToString("yyyy-MM-dd");
-
-            
-            string connectionString = "Server=DESKTOP-PB8NME4\\SQLEXPRESS;Database=RegistrationDB;Trusted_Connection=True;";
-
-         
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                string query = @"INSERT INTO StudentInformation 
-                         (StudentNo, FullName, Program, BirthDay, Gender, ContactNo, Age) 
-                         VALUES 
-                         (@StudentNo, @FullName, @Program, @BirthDay, @Gender, @ContactNo, @Age)";
-
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@StudentNo", StudentInformationClass.SetStudentNo);
-                cmd.Parameters.AddWithValue("@FullName", StudentInformationClass.SetFullName);
-                cmd.Parameters.AddWithValue("@Program", StudentInformationClass.SetProgram);
-                cmd.Parameters.AddWithValue("@BirthDay", StudentInformationClass.SetBirthDay);
-                cmd.Parameters.AddWithValue("@Gender", StudentInformationClass.SetGender);
-                cmd.Parameters.AddWithValue("@ContactNo", StudentInformationClass.SetContactNo);
-                cmd.Parameters.AddWithValue("@Age", StudentInformationClass.SetAge);
-
-                try
-                {
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Registration saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                   
-                    Form2 frm = new Form2();
-                    frm.ShowDialog();
-                }
-                catch (SqlException ex)
-                {
-                    MessageBox.Show("Database error: " + ex.Message, "SQL Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
+            StudentInformationClass.SetAge = Age(textBoxAge.Text); 
+            StudentInformationClass.SetBirthDay = datePickerBirthday.Value.ToString("yyyy-MM-dd"); Form2 frm = new Form2(); frm.ShowDialog(); }
 
 
     }

@@ -37,8 +37,42 @@ namespace AccountRegistration
         }
         private void buttonSubmit_Click(object sender, EventArgs e)
         {
+         
+            string connectionString = "Server=DESKTOP-PB8NME4\\SQLEXPRESS;Database=RegistrationDB;Trusted_Connection=True;";
+
+          
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = @"INSERT INTO StudentInformation 
+                         (StudentNo, FullName, Program, BirthDay, Gender, ContactNo, Age) 
+                         VALUES 
+                         (@StudentNo, @FullName, @Program, @BirthDay, @Gender, @ContactNo, @Age)";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@StudentNo", StudentInformationClass.SetStudentNo);
+                cmd.Parameters.AddWithValue("@FullName", StudentInformationClass.SetFullName);
+                cmd.Parameters.AddWithValue("@Program", StudentInformationClass.SetProgram);
+                cmd.Parameters.AddWithValue("@BirthDay", StudentInformationClass.SetBirthDay);
+                cmd.Parameters.AddWithValue("@Gender", StudentInformationClass.SetGender);
+                cmd.Parameters.AddWithValue("@ContactNo", StudentInformationClass.SetContactNo);
+                cmd.Parameters.AddWithValue("@Age", StudentInformationClass.SetAge);
+
+                try
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Registration saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Database error: " + ex.Message, "SQL Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+           
             this.DialogResult = DialogResult.OK;
             this.Close();
-        }    
+        }
+
     }
 }
